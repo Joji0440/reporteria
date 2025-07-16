@@ -90,7 +90,7 @@ Seguimiento de donantes y donaciones:
 ### 1. Clonar e Instalar
 ```bash
 # Clonar repositorio
-git clone [url-del-repositorio]
+git clone https://github.com/Joji0440/reporteria.git
 cd reporteria
 
 # Instalar dependencias del backend
