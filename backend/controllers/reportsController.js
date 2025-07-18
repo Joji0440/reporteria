@@ -116,12 +116,14 @@ class ReportsController {
       const result = await query(movementsQuery, params);
       const reportData = result.rows;
 
+      // Crear objeto filters siempre
+      const filters = { fecha_inicio, fecha_fin, tipo_movimiento, producto };
+
       // Exportación si se solicita
       if (export_format && ['excel', 'csv'].includes(export_format)) {
         const filePath = await this.exportReport(reportData, 'movimientos', export_format);
         
         // Registrar el reporte SOLO cuando se exporta
-        const filters = { fecha_inicio, fecha_fin, tipo_movimiento, producto };
         await this.registerReport('movimientos', userId, filters, reportData.length, export_format);
         
         // Configurar headers para forzar la extensión correcta
@@ -207,12 +209,26 @@ class ReportsController {
       const result = await query(donationsQuery, params);
       const reportData = result.rows;
 
+      // DEBUG: Verificar tipos de datos
+      if (reportData.length > 0) {
+        console.log('🔍 DEBUG - Primer item de donaciones:', {
+          cantidad_tipo: typeof reportData[0].cantidad,
+          cantidad_valor: reportData[0].cantidad,
+          cantidad_utilizada_tipo: typeof reportData[0].cantidad_utilizada,
+          cantidad_utilizada_valor: reportData[0].cantidad_utilizada,
+          cantidad_disponible_tipo: typeof reportData[0].cantidad_disponible,
+          cantidad_disponible_valor: reportData[0].cantidad_disponible
+        });
+      }
+
+      // Crear objeto filters siempre
+      const filters = { fecha_inicio, fecha_fin, id_usuario, producto };
+
       // Exportación si se solicita
       if (export_format && ['excel', 'csv'].includes(export_format)) {
         const filePath = await this.exportReport(reportData, 'donaciones', export_format);
         
         // Registrar el reporte SOLO cuando se exporta
-        const filters = { fecha_inicio, fecha_fin, id_usuario, producto };
         await this.registerReport('donaciones', currentUserId, filters, reportData.length, export_format);
         
         // Configurar headers para forzar la extensión correcta
